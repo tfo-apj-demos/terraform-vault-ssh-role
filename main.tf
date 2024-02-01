@@ -19,9 +19,9 @@ resource "vault_database_secret_backend_connection" "this" {
 		"connection_url" = local.connection_url
 	}
 
-  # postgresql {
-  #   connection_url = "postgres://username:password@host:port/database"
-  # }
+  postgresql {
+    connection_url = local.connection_url
+  }
 }
 
 resource "vault_generic_endpoint" "this" {
