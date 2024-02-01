@@ -35,8 +35,8 @@ variable "database_sslmode" {
   }
 }
 variable "database_roles" {
-  type = object({
+  type = list(object({
     name = string
     creation_statements = list(string)
-  }) 
+  }))
 }
