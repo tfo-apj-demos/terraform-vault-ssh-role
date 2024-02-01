@@ -5,6 +5,7 @@ locals {
 }
 
 resource "vault_database_secret_backend_connection" "this" {
+  plugin_name   = "postgresql-database-plugin"
   backend       = var.vault_mount_postgres_path
   name          = var.database_connection_name
   allowed_roles = [
