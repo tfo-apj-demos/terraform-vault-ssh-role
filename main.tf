@@ -1,7 +1,7 @@
 locals {
   # --- The connection string for the database can contain more than one host, so handling string creation for that case here.
-  database_address = join("," , [ for address in var.database_addresses: "${address}:${var.database_port}"])
-  connection_url = var.database_username == "" ? "postgresql://{{username}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}" : "postgresql://{{username}}:{{password}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}"
+  database_address = urlencode(join("," , [ for address in var.database_addresses: "${address}:${var.database_port}"]))
+  connection_url = var.database_password == "" ? "postgresql://{{username}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}" : "postgresql://{{username}}:{{password}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}"
 }
 
 resource "vault_database_secret_backend_connection" "this" {
