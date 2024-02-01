@@ -1,13 +1,13 @@
 locals {
   # --- The connection string for the database can contain more than one host, so handling string creation for that case here.
-  database_address = urlencode(join("," , [ for address in var.database_addresses: "${address}:${var.database_port}"]))
+  database_address = join("," , [ for address in var.database_addresses: "${address}:${var.database_port}"])
   connection_url = var.database_password == "" ? "postgresql://{{username}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}" : "postgresql://{{username}}:{{password}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}"
 }
 
 resource "vault_database_secret_backend_connection" "this" {
   plugin_name   = "postgresql-database-plugin"
   backend       = var.vault_mount_postgres_path
-  name          = var.database_connection_name
+  name          = urlencode(var.database_connection_name)
   allowed_roles = [
     for role in var.database_roles: role.name
   ]
