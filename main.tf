@@ -7,7 +7,7 @@ locals {
 resource "vault_database_secret_backend_connection" "this" {
   plugin_name   = "postgresql-database-plugin"
   backend       = var.vault_mount_postgres_path
-  name          = urlencode(var.database_connection_name)
+  name          = var.database_connection_name
   allowed_roles = [
     for role in var.database_roles: role.name
   ]
@@ -38,7 +38,7 @@ resource "vault_generic_endpoint" "this" {
 resource "vault_database_secret_backend_role" "this" {
   for_each = { for role in var.database_roles: role.name => role }
   backend = var.vault_mount_postgres_path
-  name    = urlencode(each.value.name)
-  db_name = var.database_name
+  name    = each.value.name
+  db_name = vault_database_secret_backend_connection.this.name
   creation_statements = each.value.creation_statements
 }
