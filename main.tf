@@ -20,7 +20,7 @@ resource "vault_database_secret_backend_connection" "this" {
 	}
 
   postgresql {
-    connection_url = local.connection_url
+    connection_url = "postgresql://{{username}}:{{password}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}"
     username = var.database_username
 		password = var.database_password
   }
