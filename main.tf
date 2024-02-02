@@ -11,7 +11,7 @@ resource "vault_database_secret_backend_connection" "this" {
   allowed_roles = [
     for role in var.database_roles: role.name
   ]
-  verify_connection = true
+  #verify_connection = true
 
   data = {
 		"username" = var.database_username
