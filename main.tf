@@ -21,6 +21,8 @@ resource "vault_database_secret_backend_connection" "this" {
 
   postgresql {
     connection_url = local.connection_url
+    username = var.database_username
+		password = var.database_password
   }
 }
 
