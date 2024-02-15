@@ -42,7 +42,7 @@ resource "vault_database_secret_backend_role" "this" {
 }
 
 resource "vault_policy" "this" {
-  for_each = { for role in vault_database_secret_backend_role.this: role.suffix => role }
+  for_each = { for role in vault_database_secret_backend_role.this: role.name => role }
 
   name = each.value.name
   policy =<<EOH
