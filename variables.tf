@@ -41,7 +41,4 @@ variable "database_roles" {
   }))
 }
 
-variable "TFC_WORKSPACE_ID" {
-  type = string
-  default = ""
-}
+variable "TFC_WORKSPACE_ID" {}
