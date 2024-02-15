@@ -40,5 +40,3 @@ variable "database_roles" {
     creation_statements = list(string)
   }))
 }
-
-variable "TFC_WORKSPACE_ID" {}
