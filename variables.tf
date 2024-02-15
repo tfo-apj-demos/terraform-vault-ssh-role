@@ -1,7 +1,7 @@
 variable "vault_mount_postgres_path" {
   type = string
 }
-variable "database_connection_suffix" {
+variable "database_connection_name" {
   type = string
 }
 variable "database_username" {
@@ -36,7 +36,7 @@ variable "database_sslmode" {
 }
 variable "database_roles" {
   type = list(object({
-    suffix = string
+    name = string
     creation_statements = list(string)
   }))
 }
