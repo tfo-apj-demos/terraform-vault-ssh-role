@@ -1,13 +1,12 @@
 locals {
   # --- The connection string for the database can contain more than one host, so handling string creation for that case here.
   database_address = join("," , [ for address in var.database_addresses: "${address}:${var.database_port}"])
-  connection_url = var.database_password == "" ? "postgresql://{{username}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}" : "postgresql://{{username}}:{{password}}@${local.database_address}/${var.database_name}?sslmode=${var.database_sslmode}"
 }
 
 resource "vault_database_secret_backend_connection" "this" {
   plugin_name   = "postgresql-database-plugin"
   backend       = var.vault_mount_postgres_path
-  name          = var.database_connection_name
+  name          = "${var.TFC_WORKSPACE_ID}-${var.database_connection_suffix}"
   allowed_roles = [
     for role in var.database_roles: role.name
   ]
@@ -16,7 +15,6 @@ resource "vault_database_secret_backend_connection" "this" {
   data = {
 		"username" = var.database_username
 		"password" = var.database_password
-		"connection_url" = local.connection_url
 	}
 
   postgresql {
@@ -36,9 +34,9 @@ resource "vault_generic_endpoint" "this" {
 }
 
 resource "vault_database_secret_backend_role" "this" {
-  for_each = { for role in var.database_roles: role.name => role }
+  for_each = { for role in var.database_roles: role.suffix => role }
   backend = var.vault_mount_postgres_path
-  name    = each.value.name
+  name    = "${var.TFC_WORKSPACE_ID}-${each.value.suffix}"
   db_name = vault_database_secret_backend_connection.this.name
   creation_statements = each.value.creation_statements
 }
@@ -52,4 +50,18 @@ path "${each.value.backend}/creds/${each.value.name}" {
     capabilities = ["read"]
 }
 EOH 
+}
+
+resource "vault_token" "this" {
+  for_each = { for policy in vault_policy.this: policy.name => policy }
+  no_parent = true
+  period    = "24h"
+  policies = concat([
+    for policy in vault_policy.this: policy.name 
+  ],[
+    "revoke_lease"
+  ])
+  metadata = {
+    "purpose" = "service-account"
+  }
 }

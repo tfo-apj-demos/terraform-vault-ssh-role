@@ -1,7 +1,7 @@
 variable "vault_mount_postgres_path" {
   type = string
 }
-variable "database_connection_name" {
+variable "database_connection_suffix" {
   type = string
 }
 variable "database_username" {
@@ -36,7 +36,11 @@ variable "database_sslmode" {
 }
 variable "database_roles" {
   type = list(object({
-    name = string
+    suffix = string
     creation_statements = list(string)
   }))
+}
+
+variable "TFC_WORKSPACE_ID" {
+  type = string
 }
