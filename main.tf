@@ -53,7 +53,6 @@ EOH
 }
 
 resource "vault_token" "this" {
-  for_each = { for policy in vault_policy.this: policy.name => policy }
   no_parent = true
   period    = "24h"
   policies = concat([
