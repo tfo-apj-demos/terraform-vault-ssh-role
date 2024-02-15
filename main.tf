@@ -34,7 +34,7 @@ resource "vault_generic_endpoint" "this" {
 }
 
 resource "vault_database_secret_backend_role" "this" {
-  for_each = { for role in var.database_roles: role.suffix => role }
+  for_each = { for role in var.database_roles: role.name => role }
   backend = var.vault_mount_postgres_path
   name    = "${var.TFC_WORKSPACE_ID}-${each.value.suffix}"
   db_name = vault_database_secret_backend_connection.this.name
