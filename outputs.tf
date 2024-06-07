@@ -1,5 +1,5 @@
-output "credential_paths" {
-  value = [ for role in vault_database_secret_backend_role.this: "${role.backend}/creds/${role.name}" ]
+output "credential_path" {
+  value = "${vault_ssh_secret_backend_role.this.backend}/sign/${vault_ssh_secret_backend_role.this.name}"
 }
 
 output "token" {
