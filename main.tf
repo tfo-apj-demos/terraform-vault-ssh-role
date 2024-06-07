@@ -18,7 +18,7 @@ resource "vault_ssh_secret_backend_role" "this" {
 
 
 resource "vault_policy" "this" {
-  name = each.value.name
+  name = vault_ssh_secret_backend_role.this.name
   policy =<<EOH
 path "${vault_ssh_secret_backend_role.this.backend}/sign/${vault_ssh_secret_backend_role.this.name}" {
     capabilities = ["update"]
