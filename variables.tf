@@ -2,42 +2,15 @@ variable "ssh_mount_path" {
   type = string
   default = "ssh"
 }
-variable "database_connection_name" {
+variable "ssh_role_name" {
   type = string
 }
-variable "database_username" {
+variable "ssh_default_user" {
   type = string
+  default = "ubuntu"
 }
-variable "database_password" {
+variable "ssh_allowed_users" {
   type = string
-  default = ""
-}
-variable "database_addresses" {
-  type = list(string)
-}
-variable "database_port" {
-  type = number
-  default = 5432
-}
-variable "database_name" {}
-variable "database_sslmode" {
-  type = string
-  default = "prefer"
-  validation {
-    condition = contains([
-      "disable",
-      "allow",
-      "prefer",
-      "require",
-      "verify-ca",
-      "verify-full"
-    ], var.database_sslmode)
-    error_message = "database_sslmode value should be one of: disable, allow, prefer, require, verify-ca, or verify-full."
-  }
-}
-variable "database_roles" {
-  type = list(object({
-    name = string
-    creation_statements = list(string)
-  }))
+  description = "Comma separated string of permitted usernames to authenticate as."
+  default = "*"
 }
